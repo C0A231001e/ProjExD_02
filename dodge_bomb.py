@@ -2,6 +2,7 @@ import os
 import sys
 import pygame as pg
 import random
+import time
 
 
 WIDTH, HEIGHT = 1600, 900
@@ -28,6 +29,7 @@ def main():
     bb_rct.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
     vx, vy = 5, 5
 
+    # こうかとんの飛行角度設定
     dire = {(0, -5):pg.transform.rotozoom(kk_file, -90, 2.0),
         (5, -5):pg.transform.rotozoom(kk_file, -135, 2.0),
         (0, -5):pg.transform.rotozoom(kk_file, -90, 2.0),
@@ -39,6 +41,8 @@ def main():
         (-5, -5):pg.transform.rotozoom(kk_file, -45, 2.0),
         }
 
+    bb_accs = [a for a in range(1, 11)]
+
     clock = pg.time.Clock()
     tmr = 0
 
@@ -49,6 +53,7 @@ def main():
         screen.blit(bg_img, [0, 0])
 
         if kk_rct.colliderect(bb_rct):
+            game_over(screen)
             return
 
         key_lst = pg.key.get_pressed()
@@ -60,7 +65,7 @@ def main():
                 sum_mv[0] += v[0]
                 sum_mv[1] += v[1]
 
-                kk_img = dire[tuple(sum_mv)]
+                kk_img = dire[tuple(sum_mv)]#飛行角度変更
 
 
         bb_rct.move_ip(vx, vy)
@@ -89,6 +94,24 @@ def check_bound(obj_rct: pg.Rect) ->tuple[bool, bool]:
         H = False
 
     return W, H
+
+
+def check_dire(key: tuple):
+    pass
+
+def game_over(disp):
+    filter = pg.Surface((WIDTH, HEIGHT))
+    pg.draw.rect(filter, (0, 0, 0), pg.Rect(0, 0, WIDTH, HEIGHT))
+    filter.set_alpha(127)
+    disp.blit(filter, [0, 0])
+
+    fonto = pg.font.Font(None, 80)
+    txt = fonto.render("Game Over", True, (255, 255, 255))
+    disp.blit(txt, [WIDTH/2, HEIGHT/2])
+
+    pg.display.update()
+    time.sleep(5)
+
 
 if __name__ == "__main__":
     pg.init()
