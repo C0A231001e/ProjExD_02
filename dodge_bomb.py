@@ -29,19 +29,6 @@ def main():
     bb_rct.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
     vx, vy = 5, 5
 
-    # こうかとんの飛行角度設定
-    dire = {(0, -5):pg.transform.rotozoom(kk_file, -90, 2.0),
-        (5, -5):pg.transform.rotozoom(kk_file, -135, 2.0),
-        (0, -5):pg.transform.rotozoom(kk_file, -90, 2.0),
-        (5, 0):pg.transform.flip(kk_file, True, False),
-        (5, 5):pg.transform.rotozoom(kk_file, 135, 2.0),
-        (0, 5):pg.transform.rotozoom(kk_file, 90, 2.0),
-        (-5, 5):pg.transform.rotozoom(kk_file, 45, 2.0),
-        (-5, 0):pg.transform.rotozoom(kk_file, 0, 2.0),
-        (-5, -5):pg.transform.rotozoom(kk_file, -45, 2.0),
-        }
-
-    bb_accs = [a for a in range(1, 11)]
 
     clock = pg.time.Clock()
     tmr = 0
@@ -65,9 +52,11 @@ def main():
                 sum_mv[0] += v[0]
                 sum_mv[1] += v[1]
 
-                kk_img = dire[tuple(sum_mv)]#飛行角度変更
+                kk_img = check_dire(tuple(sum_mv))#飛行角度変更
 
-
+        avx = bomb_change(tmr//500, bomb)
+        vx *= avx
+        vy *= avx
         bb_rct.move_ip(vx, vy)
         yoko, tate = check_bound(bb_rct)
         if not yoko:
@@ -97,7 +86,19 @@ def check_bound(obj_rct: pg.Rect) ->tuple[bool, bool]:
 
 
 def check_dire(key: tuple):
-    pass
+    kk_file = pg.image.load("fig/3.png")
+    direction = {(0, -5):pg.transform.rotozoom(kk_file, -90, 2.0),
+                 (5, -5):pg.transform.rotozoom(kk_file, -135, 2.0),
+                 (0, -5):pg.transform.rotozoom(kk_file, -90, 2.0),
+                 (5, 0):pg.transform.flip(kk_file, True, False),
+                 (5, 5):pg.transform.rotozoom(kk_file, 135, 2.0),
+                 (0, 5):pg.transform.rotozoom(kk_file, 90, 2.0),
+                 (-5, 5):pg.transform.rotozoom(kk_file, 45, 2.0),
+                 (-5, 0):pg.transform.rotozoom(kk_file, 0, 2.0),
+                 (-5, -5):pg.transform.rotozoom(kk_file, -45, 2.0)
+                 } # こうかとんの飛行角度設定
+
+    return direction[key]
 
 def game_over(disp):
     filter = pg.Surface((WIDTH, HEIGHT))
@@ -112,6 +113,15 @@ def game_over(disp):
     pg.display.update()
     time.sleep(5)
 
+def bomb_change(t, img):
+    bb_accs = [a for a in range(1, 11)]
+
+    big_bomb = []
+    for r in range(1, 11):
+        img = pg.Surface((20*r, 20*r))
+        pg.draw.circle(img, (255, 0, 0), (10*r, 10*r), 10*r)
+
+    return bb_accs[t]
 
 if __name__ == "__main__":
     pg.init()
