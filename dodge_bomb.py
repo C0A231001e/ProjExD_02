@@ -13,12 +13,12 @@ mv = {pg.K_UP:(0, -5),
       pg.K_LEFT:(-5, 0),
       pg.K_RIGHT:(5, 0)}
 
-
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("fig/pg_bg.jpg")
-    kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2.0)
+    kk_file = pg.image.load("fig/3.png")
+    kk_img = pg.transform.rotozoom(kk_file, 0, 2.0)
     kk_rct = kk_img.get_rect()
     kk_rct.center = 900, 400
     bomb = pg.Surface((20, 20))
@@ -27,6 +27,18 @@ def main():
     bb_rct = bomb.get_rect()
     bb_rct.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
     vx, vy = 5, 5
+
+    dire = {(0, -5):pg.transform.rotozoom(kk_file, -90, 2.0),
+        (5, -5):pg.transform.rotozoom(kk_file, -135, 2.0),
+        (0, -5):pg.transform.rotozoom(kk_file, -90, 2.0),
+        (5, 0):pg.transform.flip(kk_file, True, False),
+        (5, 5):pg.transform.rotozoom(kk_file, 135, 2.0),
+        (0, 5):pg.transform.rotozoom(kk_file, 90, 2.0),
+        (-5, 5):pg.transform.rotozoom(kk_file, 45, 2.0),
+        (-5, 0):pg.transform.rotozoom(kk_file, 0, 2.0),
+        (-5, -5):pg.transform.rotozoom(kk_file, -45, 2.0),
+        }
+
     clock = pg.time.Clock()
     tmr = 0
 
@@ -45,8 +57,11 @@ def main():
 
         for k, v in mv.items():
             if key_lst[k]:
-                sum_mv[0] = v[0]
-                sum_mv[1] = v[1]
+                sum_mv[0] += v[0]
+                sum_mv[1] += v[1]
+
+                kk_img = dire[tuple(sum_mv)]
+
 
         bb_rct.move_ip(vx, vy)
         yoko, tate = check_bound(bb_rct)
