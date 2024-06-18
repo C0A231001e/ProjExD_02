@@ -14,6 +14,7 @@ mv = {pg.K_UP:(0, -5),
       pg.K_LEFT:(-5, 0),
       pg.K_RIGHT:(5, 0)}
 
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
