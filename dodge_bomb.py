@@ -85,7 +85,7 @@ def check_bound(obj_rct: pg.Rect) ->tuple[bool, bool]:
     return W, H
 
 
-def check_dire(key: tuple):
+def check_dire(key: tuple) ->pg.transform:
     kk_file = pg.image.load("fig/3.png")
     direction = {(0, -5):pg.transform.rotozoom(kk_file, -90, 2.0),
                  (5, -5):pg.transform.rotozoom(kk_file, -135, 2.0),
@@ -101,7 +101,7 @@ def check_dire(key: tuple):
     return direction[key]
 
 
-def game_over(disp):
+def game_over(disp: pg.display) ->None:
     filter = pg.Surface((WIDTH, HEIGHT))
     pg.draw.rect(filter, (0, 0, 0), pg.Rect(0, 0, WIDTH, HEIGHT))
     filter.set_alpha(127)
@@ -114,7 +114,7 @@ def game_over(disp):
     pg.display.update()
     time.sleep(5)
 
-def bomb_change(t, img):
+def bomb_change(t: int, img: pg.Surface) ->int:
     bb_accs = [a for a in range(1, 11)]
 
     big_bomb = []
