@@ -100,6 +100,7 @@ def check_dire(key: tuple):
 
     return direction[key]
 
+
 def game_over(disp):
     filter = pg.Surface((WIDTH, HEIGHT))
     pg.draw.rect(filter, (0, 0, 0), pg.Rect(0, 0, WIDTH, HEIGHT))
