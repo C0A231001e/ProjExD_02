@@ -30,7 +30,6 @@ def main():
     bb_rct.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
     vx, vy = 5, 5
 
-
     clock = pg.time.Clock()
     tmr = 0
 
